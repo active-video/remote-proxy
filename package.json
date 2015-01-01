@@ -6,7 +6,7 @@
     "express": "^4.10.2",
     "forever-monitor": "^1.5.2",
     "optimist": "^0.6.1",
-    "serve-static": "^1.7.1",
-    "socket.io": "^1.2.1"
+    "socket.io": "^1.2.1",
+    "socketio-wildcard": "^0.1.1"
   }
 }
