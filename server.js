@@ -29,7 +29,6 @@ io.on('connection', function (socket) {
 
     //on messages, broadcast them in the other direction
     socket.on('message', function(data){
-        console.log('Sending the message from ' + socket.id + ' to ' + roomIdOther);
         socket.broadcast.to(roomIdOther).emit('message', data);
     })
 
@@ -77,7 +76,8 @@ app.get('/key', function (req, res) {
         message.keyCode = keyCode
     }
 
-    console.log('Sending to ' + roomId, message);
+    //console.log('Sending to ' + roomId, message);
+    console.log('Sending message to ' + roomId);
     io.to(roomId).emit('message', message);
 
     res.writeHeader(200);

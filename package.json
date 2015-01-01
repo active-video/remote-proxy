@@ -1,6 +1,6 @@
 {
   "name": "cloudtv-remote-proxy",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "A CloudTV proxy that can be put between an application and the world, allowing inbound communication with an applicaiton.",
   "dependencies": {
     "express": "^4.10.2",
