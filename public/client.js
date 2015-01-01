@@ -8,7 +8,7 @@
     }
 
     var host = '%HOST%';
-    PORT = '%PORT%';
+    var PORT = '%PORT%';
 
     var isActive = true;
 
