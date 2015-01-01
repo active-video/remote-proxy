@@ -1,4 +1,11 @@
-//Client.js for apps
+/**
+ * Client interface for 2-way communication
+ * with CloudTV WebRemote
+ * To use, you must edit your programs.xml, and
+ * add this script to your "scripts" attribute,
+ * remember, if you need more than 1 script, just
+ * separate them by spaces
+ */
 
 (function(){
 
@@ -7,10 +14,9 @@
         return;
     }
 
-    var host = '%HOST%';
-    var PORT = '%PORT%';
-
-    var isActive = true;
+    var host = '%HOST%',
+        PORT = '%PORT%',
+        isActive = true;
 
     //Keep Track of focus/blur so that we don't respond when we aren't the active window
     window.addEventListener('focus', function () {
@@ -56,10 +62,35 @@
         }
     };
 
-    var CLIENTID = navigator.avClient ? navigator.avClient.id : 'shared';
-    document.write('<scr' + 'ipt src="%HOST%/socket.io/socket.io.js"></scr' + 'ipt>');
-    document.write('<scr' +'ipt> var __socket = io("%HOST%?role=%ROLE%&clientid=" + (navigator.avClient ? navigator.avClient.id : "shared")); __socket.on("message", window.__onMessage);</scr' + 'ipt>');
 
 
+    var loadSocketIo = function(){
+        console.log('SOCKET - loadSocketIo()');
 
+        var CLIENTID = navigator.avClient ? navigator.avClient.id : 'shared';
+        var socketScriptUrl = '%HOST%/socket.io/socket.io.js';
+
+        console.log("SOCKET - loading: ", socketScriptUrl);
+
+        var s = document.createElement('script');
+        s.setAttribute("type","text/javascript")
+        s.setAttribute('src', socketScriptUrl);
+        s.onload = startSocket;
+        document.getElementsByTagName("head")[0].appendChild(s);
+    }
+
+    var startSocket = function(){
+        console.log("SOCKET - startSocket()")
+        if(typeof(io) === 'undefined'){
+            setTimeout(startSocket, 30);
+            console.log("io=" + typeof(io));
+        }else{
+            //global
+            console.log("SOCKET - Creating");
+            __socket = io("%HOST%?role=%ROLE%&clientid=" + (navigator.avClient ? navigator.avClient.id : "shared"));
+            __socket.on("message", window.__onMessage);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadSocketIo);
 })()
