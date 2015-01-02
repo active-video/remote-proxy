@@ -3,6 +3,10 @@ remote-proxy
 
 Remote Control proxy for CloudTV
 
+## Run as a service
+
+    cd /var/www/html/cloudtv-remote-proxy/node_modules/cloudtv-remote-proxy;
+    nohup node index.js -p 9083 &
 
 ## Options
 
