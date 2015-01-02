@@ -1,12 +1,26 @@
 {
-  "name": "cloudtv-remote-proxy",
-  "version": "1.1.1",
-  "description": "A CloudTV proxy that can be put between an application and the world, allowing inbound communication with an applicaiton.",
-  "dependencies": {
-    "express": "^4.10.2",
-    "forever-monitor": "^1.5.2",
-    "optimist": "^0.6.1",
-    "socket.io": "^1.2.1",
-    "socketio-wildcard": "^0.1.1"
-  }
+    "name": "cloudtv-remote-proxy",
+    "version": "1.1.2",
+    "description": "A CloudTV proxy that can be put between an application and the world, allowing inbound communication with an applicaiton.",
+    "dependencies": {
+        "express": "^4.10.2",
+        "forever-monitor": "^1.5.2",
+        "optimist": "^0.6.1",
+        "socket.io": "^1.2.1",
+        "socketio-wildcard": "^0.1.1"
+    },
+
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/active-video/remote-proxy"
+    },
+    "bugs": {
+        "url": "https://github.com/active-video/remote-proxy/issues"
+    },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "https://github.com/active-video/remote-proxy/blob/master/MIT-LICENSE"
+        }
+    ]
 }
