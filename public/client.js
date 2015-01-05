@@ -32,7 +32,7 @@
 
         //restart if we have a socket and it's not in a connected state
         if(__socket !== null && __socket.disconnected && __socket.io.readyState !== 'opening'){
-            console.log('SOCKET - Reconnecting ' + location.href);
+            //console.log('SOCKET - Reconnecting ' + location.href);
             __socket.connect();
             //create the socket if it wasn't created yet
         }else if(!__socket){
@@ -45,7 +45,7 @@
         s.onload = undefined;
 
         if(__socket){
-            console.log('SOCKET - Disconnecting ' + location.href);
+            //console.log('SOCKET - Disconnecting ' + location.href);
             if(evt.type === 'close'){
                 __socket.destroy();
             }else{
@@ -77,7 +77,7 @@
 
     var onMessage = window.__onMessage = function(message){
         //Only act on messages if we are the top window
-        console.log('SOCKET.onMessage', isActive, message, location.href);
+        //console.log('SOCKET.onMessage', isActive, message, location.href);
         if(!isActive){
             return;
         }
@@ -98,12 +98,12 @@
 
 
     var loadSocketIo = function(){
-        console.log('SOCKET - loadSocketIo() ' + location.href);
+        //console.log('SOCKET - loadSocketIo() ' + location.href);
 
         var CLIENTID = navigator.avClient ? navigator.avClient.id : 'shared';
         var socketScriptUrl = '%HOST%/socket.io/socket.io.js';
 
-        //console.log('SOCKET - loading: ', socketScriptUrl);
+        console.log('SOCKET - load WebRemote: ' +  socketScriptUrl + ' on page ' + location.href);
 
         s = document.createElement('script');
         s.setAttribute('type','text/javascript')
@@ -121,7 +121,7 @@
             setTimeout(startSocket, 30);
         }else{
             //global
-            console.log('SOCKET - Creating, ' + location.href);
+            //console.log('SOCKET - Creating, ' + location.href);
             __socket = io('%HOST%?role=%ROLE%&clientid=' + (navigator.avClient ? navigator.avClient.id : 'shared'));
             __socket.on('message', window.__onMessage);
         }
