@@ -12,7 +12,10 @@ console.log('Starting Remote Proxy', args);
 
 var app = require('express')();
 var http = require('http').Server(app);
-var io = require('socket.io')(http);
+var io = require('socket.io')(http, {
+    'transports': ["polling"],
+    'polling duration': 10
+});
 var middleware = require('socketio-wildcard')();
 
 io.use(middleware);
@@ -49,7 +52,7 @@ io.on('connection', function (socket) {
 /**
  * KEY - send keycodes to an app
  */
-app.get('/key', function (req, res) {
+app.all('/key', function (req, res) {
 
     //http://10.230.104.2:16666/key?clientid=Roku-3100X_13C2A0061398&key=ok&rand=1420087837241-5144
     var keyCode = req.query.keyCode

@@ -2,12 +2,16 @@
  * Client interface for 2-way communication
  * with CloudTV WebRemote
  * To use, you must edit your programs.xml, and
- * add this script to your "scripts" attribute,
+ * add this script to your 'scripts' attribute,
  * remember, if you need more than 1 script, just
  * separate them by spaces
  */
 
 (function(){
+
+    if(location.href === 'about:blank'){
+        return;
+    }
 
     //Not supported on i-frames
     if(window.location !== window.parent.location){
@@ -16,35 +20,64 @@
 
     var host = '%HOST%',
         PORT = '%PORT%',
+        isActive = false;
+
+    //global
+    __socket = null;
+    s = null;//script tag
+
+    //lifecycle functions
+    var reopenSocket = function () {
         isActive = true;
+
+        //restart if we have a socket and it's not in a connected state
+        if(__socket !== null && __socket.disconnected && __socket.io.readyState !== 'opening'){
+            console.log('SOCKET - Reconnecting ' + location.href);
+            __socket.connect();
+            //create the socket if it wasn't created yet
+        }else if(!__socket){
+            startSocket();
+        }
+    }
+
+    var closeSocket = function (evt) {
+        isActive = false;
+        s.onload = undefined;
+
+        if(__socket){
+            console.log('SOCKET - Disconnecting ' + location.href);
+            if(evt.type === 'close'){
+                __socket.destroy();
+            }else{
+                __socket.disconnect();
+            }
+
+        }
+    }
 
     //Keep Track of focus/blur so that we don't respond when we aren't the active window
-    window.addEventListener('focus', function () {
-        isActive = true;
-    });
-
-    window.addEventListener('blur', function () {
-        isActive = false;
-    });
+    window.addEventListener('focus', reopenSocket);
+    window.addEventListener('blur', closeSocket);
+    window.addEventListener('close', closeSocket);
 
     var simulateKeyPress = function(keyCode, el){
         var eventObj = document.createEventObject ?
-            document.createEventObject() : document.createEvent("Events");
+            document.createEventObject() : document.createEvent('Events');
 
         if(eventObj.initEvent){
-            eventObj.initEvent("keydown", true, true);
+            eventObj.initEvent('keydown', true, true);
         }
 
         eventObj.keyCode = keyCode;
         eventObj.which = keyCode;
 
         var target = el || document.activeElement;
-        target.dispatchEvent ? target.dispatchEvent(eventObj) : target.fireEvent("onkeydown", eventObj);
+        target.dispatchEvent ? target.dispatchEvent(eventObj) : target.fireEvent('onkeydown', eventObj);
     };
 
     var onMessage = window.__onMessage = function(message){
         //Only act on messages if we are the top window
-        console.log("socket.onMessage", isActive, message);
+        console.log('SOCKET.onMessage', isActive, message, location.href);
         if(!isActive){
             return;
         }
@@ -65,32 +98,39 @@
 
 
     var loadSocketIo = function(){
-        console.log('SOCKET - loadSocketIo()');
+        console.log('SOCKET - loadSocketIo() ' + location.href);
 
         var CLIENTID = navigator.avClient ? navigator.avClient.id : 'shared';
         var socketScriptUrl = '%HOST%/socket.io/socket.io.js';
 
-        console.log("SOCKET - loading: ", socketScriptUrl);
+        //console.log('SOCKET - loading: ', socketScriptUrl);
 
-        var s = document.createElement('script');
-        s.setAttribute("type","text/javascript")
+        s = document.createElement('script');
+        s.setAttribute('type','text/javascript')
         s.setAttribute('src', socketScriptUrl);
         s.onload = startSocket;
-        document.getElementsByTagName("head")[0].appendChild(s);
+        document.getElementsByTagName('head')[0].appendChild(s);
     }
 
     var startSocket = function(){
-        console.log("SOCKET - startSocket()")
+        if(__socket){
+            return;
+        }
+
         if(typeof(io) === 'undefined'){
             setTimeout(startSocket, 30);
-            console.log("io=" + typeof(io));
         }else{
             //global
-            console.log("SOCKET - Creating");
-            __socket = io("%HOST%?role=%ROLE%&clientid=" + (navigator.avClient ? navigator.avClient.id : "shared"));
-            __socket.on("message", window.__onMessage);
+            console.log('SOCKET - Creating, ' + location.href);
+            __socket = io('%HOST%?role=%ROLE%&clientid=' + (navigator.avClient ? navigator.avClient.id : 'shared'));
+            __socket.on('message', window.__onMessage);
         }
     }
 
-    document.addEventListener('DOMContentLoaded', loadSocketIo);
+    if(document.readyState === 'complete'){
+        loadSocketIo();
+    }else{
+        document.addEventListener('DOMContentLoaded', loadSocketIo);
+    }
+
 })()
