@@ -90,7 +90,9 @@
 
 
             default:
-
+                if(window.onmessage){
+                    window.onmessage({data: message});
+                }
                 break;
         }
     };
