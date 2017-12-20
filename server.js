@@ -30,8 +30,11 @@ io.on('connection', function (socket) {
 
     socket.join(roomId);
 
+    console.log("connection: clientid=%s, role=%s, roomId=%s, roomIdOther=%s", clientid, role, roomId, roomIdOther);
+
     //on messages, broadcast them in the other direction
     socket.on('message', function(data){
+        console.log("Sending from ", clientid, " to ", roomIdOther, data);
         socket.broadcast.to(roomIdOther).emit('message', data);
     });
 

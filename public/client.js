@@ -46,8 +46,8 @@
     }
     //Keep Track of focus/blur so that we don't respond when we aren't the active window
     window.addEventListener('focus', reopenSocket);
-    window.addEventListener('blur', closeSocket);
-    window.addEventListener('close', closeSocket);
+    //window.addEventListener('blur', closeSocket);
+    //window.addEventListener('close', closeSocket);
     var simulateKeyPress = function(keyCode, el){
         var eventObj = document.createEventObject ?
             document.createEventObject() : document.createEvent('Events');
@@ -61,7 +61,7 @@
     };
     var onMessage = window.__onMessage = function(message){
         //Only act on messages if we are the top window
-        //console.log('SOCKET.onMessage', isActive, message, location.href);
+        console.log('SOCKET.onMessage', isActive, JSON.stringify(message), location.href);
         if(!isActive){
             return;
         }
@@ -78,6 +78,7 @@
     };
 
     window.sendMessage = function(data) {
+        console.log("Sending message", data);
         __socket.send(data);
     };
 
@@ -106,7 +107,7 @@
         }else{
             //global
             //console.log('SOCKET - Creating, ' + location.href);
-            __socket = io('%HOST%?role=%ROLE%&clientid=' + (navigator.avClient ? navigator.avClient.id : 'shared'));
+            __socket = window.ioSocket = io('%HOST%?role=%ROLE%&clientid=' + (navigator.avClient ? navigator.avClient.id : 'shared'));
             __socket.on('message', window.__onMessage);
         }
     };
