@@ -6,7 +6,7 @@
 
 var forever    = require('forever-monitor'),
     args       = require('optimist').argv,
-    script     = 'server.js',
+    script     = __dirname + '/server.js',
     tries      = 10,
     scriptArgs = [],
     prop,
