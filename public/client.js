@@ -76,9 +76,18 @@
                 break;
         }
     };
+
+    window.sendMessage = function(data) {
+        __socket.send(data);
+    };
+
     var loadSocketIo = function(){
         //console.log('SOCKET - loadSocketIo() ' + location.href);
         var CLIENTID = navigator.avClient ? navigator.avClient.id : 'shared';
+
+        //make case insensitive, and alpha-numeric only
+        CLIENTID = CLIENTID.replace(/[^0-9a-z]/gi, '').toLowerCase();
+
         var socketScriptUrl = '%HOST%/socket.io/socket.io.js';
         console.log('SOCKET - load WebRemote: ' +  socketScriptUrl + ' on page ' + location.href);
         s = document.createElement('script');
@@ -86,7 +95,8 @@
         s.setAttribute('src', socketScriptUrl);
         s.onload = startSocket;
         document.getElementsByTagName('head')[0].appendChild(s);
-    }
+    };
+
     var startSocket = function(){
         if(__socket){
             return;
