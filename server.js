@@ -165,4 +165,4 @@ app.get('/remote', function (req, res) {
     });
 });
 
-module.exports = io;
+module.exports = app;
