@@ -12,9 +12,13 @@ var args    = require('optimist').argv,
 console.log('Starting Remote Proxy', args);
 
 var app = require('express')();
+
+//for testing only
+//process.env.SSL_KEY = fs.readFileSync('./ssl/localhost.key');
+//process.env.SSL_CERT = fs.readFileSync('./ssl/localhost.cert');
+
 if(process.env.SSL_KEY && process.env.SSL_CERT) {
-    http = require('https');
-    http.createServer({
+    http = require('https').createServer({
         key: process.env.SSL_KEY,
         cert: process.env.SSL_CERT
     }, app);
