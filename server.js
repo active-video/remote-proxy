@@ -17,7 +17,7 @@ if(process.env.SSL_KEY && process.env.SSL_CERT) {
     http.createServer({
         key: process.env.SSL_KEY,
         cert: process.env.SSL_CERT
-    }, app).listen(443);
+    }, app);
 } else {
     http = require('http').Server(app);
 }
