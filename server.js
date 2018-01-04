@@ -144,7 +144,7 @@ app.get('/client', function (req, res) {
 //Serve up the client script, but inject host/port/etc
 app.get('/remote', function (req, res) {
     var headers = util._extend({}, req.headers || {}),
-        host = req.headers.host;
+        host = process.env.HOSTNAME || req.headers.host;
 
 
     fs.readFile(__dirname+'/public/client.js', 'utf-8', function (err, data) {
