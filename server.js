@@ -6,12 +6,22 @@ var args    = require('optimist').argv,
     url     = require('url'),
     util    = require('util'),
     fs      = require('fs'),
-    KEYS    = require('./public/keycodes.json');
+    KEYS    = require('./public/keycodes.json'),
+    http;
 
 console.log('Starting Remote Proxy', args);
 
 var app = require('express')();
-var http = require('http').Server(app);
+if(process.env.SSL_KEY && process.env.SSL_CERT) {
+    http = require('https');
+    http.createServer({
+        key: process.env.SSL_KEY,
+        cert: process.env.SSL_CERT
+    }, app).listen(443);
+} else {
+    http = require('http').Server(app);
+}
+
 var io = require('socket.io')(http, {
     'transports': ["polling"],
     'polling duration': 10
