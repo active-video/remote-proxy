@@ -17,7 +17,9 @@ var app = require('express')();
 //process.env.SSL_KEY = fs.readFileSync('./ssl/localhost.key');
 //process.env.SSL_CERT = fs.readFileSync('./ssl/localhost.cert');
 
-if(process.env.SSL_KEY && process.env.SSL_CERT) {
+var secure = process.env.SSL_KEY && process.env.SSL_CERT;
+
+if(secure) {
     http = require('https').createServer({
         key: process.env.SSL_KEY,
         cert: process.env.SSL_CERT
@@ -28,7 +30,8 @@ if(process.env.SSL_KEY && process.env.SSL_CERT) {
 
 var io = require('socket.io')(http, {
     'transports': ["polling"],
-    'polling duration': 10
+    'polling duration': 10,
+    'secure': secure
 });
 var middleware = require('socketio-wildcard')();
 
@@ -143,7 +146,7 @@ app.get('/client', function (req, res) {
 
 
         var d = data;
-        data = data.replace(/\%HOST\%/g, 'http://' + host)
+        data = data.replace(/\%HOST\%/g, '//' + host)
             .replace(/\%PORT\%/g, port)
             .replace(/\%ROLE\%/g, 'app');
 
@@ -169,7 +172,7 @@ app.get('/remote', function (req, res) {
 
 
         var d = data;
-        data = data.replace(/\%HOST\%/g, 'http://' + host)
+        data = data.replace(/\%HOST\%/g, '//' + host)
             .replace(/\%PORT\%/g, port)
             .replace(/\%ROLE\%/g, 'remote');
 
