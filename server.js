@@ -1,7 +1,7 @@
 'use strict';
 
 var args    = require('optimist').argv,
-    port    = process.env.PORT || isNaN(parseInt(args.p, 10)) ? 80 : args.p,
+    port    = process.env.PORT || (isNaN(parseInt(args.p, 10)) ? 80 : args.p),
     contentPort = port+ 1,
     url     = require('url'),
     util    = require('util'),
