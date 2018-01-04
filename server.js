@@ -134,7 +134,8 @@ app.get('/client', function (req, res) {
             .replace(/\%ROLE\%/g, 'app');
 
         res.writeHeader('200', {
-            'content-type' : 'application/javascript'
+            'content-type' : 'application/javascript',
+            'cache-control': 'max-age=1'
         });
         res.end(data);
     });
