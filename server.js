@@ -137,6 +137,8 @@ app.get('/client', function (req, res) {
     var headers = util._extend({}, req.headers || {}),
         host = process.env.HOSTNAME || req.headers.host;
 
+    host = (secure ? 'https://' : 'http://') + host;
+
 
     fs.readFile(__dirname+'/public/client.js', 'utf-8', function (err, data) {
         if (err){
@@ -146,7 +148,7 @@ app.get('/client', function (req, res) {
 
 
         var d = data;
-        data = data.replace(/\%HOST\%/g, '//' + host)
+        data = data.replace(/\%HOST\%/g, host)
             .replace(/\%PORT\%/g, port)
             .replace(/\%ROLE\%/g, 'app');
 
@@ -163,6 +165,7 @@ app.get('/remote', function (req, res) {
     var headers = util._extend({}, req.headers || {}),
         host = process.env.HOSTNAME || req.headers.host;
 
+    host = (secure ? 'https://' : 'http://') + host;
 
     fs.readFile(__dirname+'/public/client.js', 'utf-8', function (err, data) {
         if (err){
@@ -172,7 +175,7 @@ app.get('/remote', function (req, res) {
 
 
         var d = data;
-        data = data.replace(/\%HOST\%/g, '//' + host)
+        data = data.replace(/\%HOST\%/g, host)
             .replace(/\%PORT\%/g, port)
             .replace(/\%ROLE\%/g, 'remote');
 
