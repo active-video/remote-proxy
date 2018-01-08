@@ -77,18 +77,16 @@
         }
     };
 
+    var alphaNumericOnly = function(str){
+        return str && str.replace(/[^0-9a-z]/gi, '').toLowerCase();
+    };
+
     window.sendMessage = function(data) {
         console.log("Sending message", data);
         __socket.send(data);
     };
 
     var loadSocketIo = function(){
-        //console.log('SOCKET - loadSocketIo() ' + location.href);
-        var CLIENTID = navigator.avClient ? navigator.avClient.id : 'shared';
-
-        //make case insensitive, and alpha-numeric only
-        CLIENTID = CLIENTID.replace(/[^0-9a-z]/gi, '').toLowerCase();
-
         var socketScriptUrl = '%HOST%/socket.io/socket.io.js';
         console.log('SOCKET - load WebRemote: ' +  socketScriptUrl + ' on page ' + location.href);
         s = document.createElement('script');
@@ -107,7 +105,7 @@
         }else{
             //global
             //console.log('SOCKET - Creating, ' + location.href);
-            __socket = window.ioSocket = io('%HOST%?role=%ROLE%&clientid=' + (navigator.avClient ? navigator.avClient.id : 'shared'));
+            __socket = window.ioSocket = io('%HOST%?role=%ROLE%&clientid=' + alphaNumericOnly(navigator.avClient ? navigator.avClient.id : 'shared'));
             __socket.on('message', window.__onMessage);
         }
     };
