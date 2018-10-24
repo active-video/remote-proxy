@@ -135,7 +135,7 @@ http.listen(port, function () {
 //Serve up the client script, but inject host/port/etc
 app.get('/client', function (req, res) {
     var headers = util._extend({}, req.headers || {}),
-        host = process.env.HOSTNAME || req.headers.host;
+        host = req.headers.host || process.env.HOSTNAME;
 
     host = (secure ? 'https://' : 'http://') + host;
 
@@ -163,7 +163,7 @@ app.get('/client', function (req, res) {
 //Serve up the client script, but inject host/port/etc
 app.get('/remote', function (req, res) {
     var headers = util._extend({}, req.headers || {}),
-        host = process.env.HOSTNAME || req.headers.host;
+        host = req.headers.host || process.env.HOSTNAME;
 
     host = (secure ? 'https://' : 'http://') + host;
 
