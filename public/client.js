@@ -6,7 +6,7 @@
  * remember, if you need more than 1 script, just
  * separate them by spaces
  */
-var SERVER_HOST = '%HOST';
+var SERVER_HOST = '%HOST%';
 
 (function(){
     if(location.href === 'about:blank'){
